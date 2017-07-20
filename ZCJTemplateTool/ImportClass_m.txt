@@ -1,0 +1,32 @@
+//
+//  MoerFinanceImportClass.m
+//  asd
+//
+//  Created by 高源 on 2017/7/13.
+//  Copyright © 2017年 高源. All rights reserved.
+//
+
+#import "MoerFinanceImportClass.h"
+
+{% for p in ClassName %}
+#import "{{ p.key }}.h"{% /for %}
+
+@interface MoerFinanceImportClass ()
+
+@end
+
+@implementation MoerFinanceImportClass
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        NSMutableArray *array = [NSMutableArray new];
+    {% for p in ClassName %}
+        {{ p.key }} *{{ p.key | lowercase }} = [[{{ p.key }} alloc] init];
+        [array addObject:{{ p.key | lowercase }}];{% /for %}
+    }
+    return self;
+}
+
+@end
+

@@ -1,0 +1,59 @@
+//
+//  {{ ClassName }}.m
+//  asd
+//
+//  Created by 高源 on 2017/7/13.
+//  Copyright © 2017年 高源. All rights reserved.
+//
+
+#import "{{ ClassName }}.h"
+
+@interface {{ ClassName }} ()
+
+@property (nonatomic, strong) NSString *name;
+
+@end
+
+@implementation {{ ClassName }}
+{
+{% for p in firstMethodParams %}
+{{ p.value }} *_{{ p.key }};
+{% /for %}
+{% for p in secondMethodParams %}
+{{ p.value }} *_{{ p.key }};
+{% /for %}
+}
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+
+        [self mf_first_{% for p in firstMethodParams %}With{{ p.key | capitalized }}:@"{{ p.key }}" {% /for %}{% for p in firstMethodParams %}];
+        self.name = [self mf_third_returnValueMethod];
+    }
+    return self;
+}
+
+
+- (void)mf_first_{% for p in firstMethodParams %}With{{ p.key | capitalized }}:({{ p.value }} *){{ p.key }} {% /for %} {
+    {% for p in firstMethodParams %}
+    _{{ p.key }} = {{ p.key }};
+    {% /for %}
+    [self mf_second_thisMethodParams{% for p in secondMethodParams %}With{{ p.key | capitalized }}:@"{{ p.key }}" {% /for %} ];
+}
+
+- (void)mf_second_thisMethodParams{% for p in secondMethodParams %}With{{ p.key | capitalized }}:({{ p.value }} *){{ p.key }} {% /for %} {
+    {% for p in secondMethodParams %}
+    _{{ p.key }} = {{ p.key }};
+    {% /for %}
+    [self mf_third_returnValueMethod];
+}
+
+- (NSString *)mf_third_returnValueMethod {
+    NSString *name = [NSString stringWithFormat:@"{% for p in firstMethodParams %}%@{% /for %}"{% for p in firstMethodParams %},@"{{ p.key }}"{% /for %}];
+    return name;
+}
+
+
+@end
+
